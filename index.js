@@ -87,13 +87,39 @@ async function run() {
       next();
     };
     
-    app.get('/instructors', async(req, res) => {
-      // const query = req.body;
-      // console.log(query)
-      const result = await instructorCollection.find().toArray();
+    app.patch("/makeInstructors/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const filter = { _id: new ObjectId(id)}
+      // const query = { role: "instructor" };
+       const updateDoc = {
+         $set: {
+           role: "instructor",
+         },
+       };
+      const result = await userCollection.updateOne(filter, updateDoc);
       res.send(result);
-    })
+    });
+
+    app.get("/instructors", async (req, res) => {
+      // const id = req.body;
+      // console.log(id)
+      const filter = { role: 'instructor'}
+      // const query = { role: "instructor" };
+      //  const updateDoc = {
+      //    $set: {
+      //      role: "instructor",
+      //    },
+      //  };
+      const result = await userCollection.find(filter).toArray();
+      res.send(result);
+    });
+
+   
     
+
+
+
     app.get('/activeClasses', async(req, res) => {
       // const query = req.body;
       // console.log(query)
@@ -102,25 +128,65 @@ async function run() {
       res.send(result);
     })
     
+
     app.get('/allClasses', async(req, res) => {
       // const query = req.body;
       // console.log(query)
       // const query = {status: 'active'}
       const result = await classCollection.find().toArray();
       res.send(result);
+    })
+    // all classes data shorting
+    app.get('/allClasses', async(req, res) => {
+      // const query = req.body;
+
+      const result = await classCollection.find().toArray();
+      res.send(result);
       })
    
-        app.patch("/statusUpdate/:id", async (req, res) => {
+ app.get("/SixClasses", async (req, res) => {
+   const query = {};
+   const options = {
+     sort: { availableSeats: -1 },
+   };
+   const result = await classCollection.find(query, options).toArray();
+   res.send(result);
+ });
+
+    
+        app.patch("/statusUpdate/:id", async(req, res) => {
           const id = req.params.id;
-        
+        console.log(id)
           const filter = { _id: new ObjectId(id) };
+          // const options = { upsert: true };
           const updateDoc = {
             $set: {
               status: "active",
             },
           };
 
-          const result = await userCollection.updateOne(filter, updateDoc);
+          const result = await classCollection.updateOne(filter, updateDoc);
+          res.send(result);
+        });
+    
+        app.patch("/classFeedback/:id", async(req, res) => {
+         const id = req.params.id;
+         const textClass = req.body.feedback;
+
+         console.log(id, textClass);
+          const filter = { _id: new ObjectId(id) };
+          const options = { upsert: true };
+          const updateDoc = {
+            $set: {
+              feedback: textClass,
+            },
+          };
+
+          const result = await classCollection.updateOne(
+            filter,
+            updateDoc,
+            options
+          );
           res.send(result);
         });
 
@@ -227,6 +293,14 @@ async function run() {
     res.send(result);
   });
      
+
+
+
+
+
+
+
+    
     // instructor apis
 
   app.get("/users/instructor/:email", verifyJWT, async (req, res) => {
