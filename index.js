@@ -124,16 +124,13 @@ async function run() {
     
 
     app.get('/allClasses', async(req, res) => {
-      // const query = req.body;
-      // console.log(query)
-      // const query = {status: 'active'}
+     
       const result = await classCollection.find().toArray();
       res.send(result);
     })
-    // all classes data shorting
+   
     app.get('/allClasses', async(req, res) => {
-      // const query = req.body;
-
+     
       const result = await classCollection.find().toArray();
       res.send(result);
       })
@@ -210,11 +207,7 @@ async function run() {
       res.send(result);
     })
     
-    // app.get('/carts', async(req, res) => {
-    
-    //   const result = await cartCollection.find().toArray();
-    //   res.send(result);
-    //   })
+   
 
     app.get('/carts', verifyJWT, async(req, res) => {
       const email = req.query.email;
@@ -230,8 +223,40 @@ async function run() {
            .send({ error: true, message: "porviden access" });
        }
 
-      const query = { email: email };
+      const query = { email: email, payments: 'unPaid' };
       const result = await cartCollection.find(query).toArray();
+      res.send(result);
+      })
+
+    
+    app.patch('/paymentsCard/:id', async(req, res) => {
+      const id = req.params.id;
+      // const body = req.body;
+      // console.log(body)
+      // if (!email) {
+      //   res.send([]);
+      // }
+ 
+      //  const decodedEmail = req.decoded.email;
+      //  if (email !== decodedEmail) {
+      //    return res
+      //      .status(403)
+      //      .send({ error: true, message: "porviden access" });
+      //  }
+
+      const query = { _id: new ObjectId(id) };
+
+       const options = { upsert: true };
+       // create a document that sets the plot of the movie
+       const updateDoc = {
+         $set: {
+           payments: 'paid',
+         },
+      };
+      
+      const result = await cartCollection
+        .find(query, updateDoc, options)
+        // .toArray();
       res.send(result);
       })
 
