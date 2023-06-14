@@ -92,7 +92,7 @@ async function run() {
       const id = req.params.id;
       console.log(id)
       const filter = { _id: new ObjectId(id)}
-      // const query = { role: "instructor" };
+      
        const updateDoc = {
          $set: {
            role: "instructor",
