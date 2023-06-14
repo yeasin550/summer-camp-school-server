@@ -136,7 +136,7 @@ async function run() {
       const result = await classCollection.find().toArray();
       res.send(result);
       })
-   
+  //  home page data send
  app.get("/SixClasses", async (req, res) => {
    const query = {};
    const options = {
