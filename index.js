@@ -75,6 +75,7 @@ async function run() {
       res.send({ token });
     });
 
+    // verify admin email 
     const verifyAdmin = async (req, res, next) => {
       const email = req.decoded.email;
       const query = { email: email };
