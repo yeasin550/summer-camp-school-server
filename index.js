@@ -217,7 +217,7 @@ async function run() {
       const email = req.query.email;
       console.log(email)
       if (!email) {
-        res.send([]);
+       return res.send([]);
       }
 
        const decodedEmail = req.decoded.email;
@@ -227,7 +227,7 @@ async function run() {
            .send({ error: true, message: "porviden access" });
        }
 
-      const query = { email: email, payments: 'unPaid' };
+      const query = { email: email };
       const result = await cartCollection.find(query).toArray();
       res.send(result);
       })
