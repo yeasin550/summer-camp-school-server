@@ -280,7 +280,7 @@ async function run() {
     res.send(result);
   });
 
-    // admin apis
+    // admin apis users
 
       app.get("/users/admin/:email", verifyJWT, async (req, res) => {
         const email = req.params.email;
