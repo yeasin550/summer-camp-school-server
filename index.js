@@ -87,6 +87,8 @@ async function run() {
       }
       next();
     };
+
+    // make instructor
     
     app.patch("/makeInstructors/:id", async (req, res) => {
       const id = req.params.id;
