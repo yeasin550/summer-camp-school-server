@@ -65,7 +65,7 @@ async function run() {
       const userCollection = client.db('summerCamp').collection('users')
       const cartCollection = client.db('summerCamp').collection('carts')
 
-
+    // verify email jwt 
     app.post("/jwt", (req, res) => {
       const user = req.body;
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
